@@ -10,11 +10,8 @@ jobs:
           uses: actions/checkout@main
           
         - name: 'Login via Azure CLI'
-          uses: azure/login@v1.1
-          with:
-              client-id: ${{ secrets.AZURE_CLIENT_ID }}
-              tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-              subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          run: |
+            az login --service-principal -u 18a2997c-cdfa-4eac-8d64-becbc7a4fef1 -p ZodIN5u_S.awwqu_d4uSErxNyU6c7BuWz~ --tenant ad888b01-5202-4130-908a-906b3dfdddc4
         
         - name: 'Build and push image'
           uses: azure/docker-login@v1
