@@ -11,7 +11,7 @@ jobs:
           
         - name: 'Login via Azure CLI'
           run: |
-            az login --service-principal -u 18a2997c-cdfa-4eac-8d64-becbc7a4fef1 -p ZodIN5u_S.awwqu_d4uSErxNyU6c7BuWz~ --tenant ad888b01-5202-4130-908a-906b3dfdddc4
+            az login --service-principal -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} --tenant  ${{ secrets.AZURE_TENANT }}
         
         - name: 'Build and push image'
           uses: azure/docker-login@v1
@@ -20,13 +20,13 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build ./WebApplication -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/testapp:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/testapp:${{ github.sha }}
+            docker build ./WebApplication -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.AZURE_REPOSITORY }}:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.AZURE_REPOSITORY }}:${{ github.sha }}
 
         - uses: azure/webapps-deploy@v2
           with:
-            app-name: 'testcicd1231'
-            images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/testapp:${{ github.sha }}
+            app-name: ${{ secrets.AZURE_DEPLOY_APP }}
+            images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.AZURE_REPOSITORY }}:${{ github.sha }}
     
         - name: Azure logout
           run: |
